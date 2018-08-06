@@ -1,0 +1,43 @@
+{% extends "dash-base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Account Setting{% endblock %}
+
+
+{% block content %}
+
+<!-- Start Dashboard Page => Post your Resume-->
+<div class="content">
+    <div class="row">
+      <div class="col-xs-12">
+          <!-- Start Header Dashboard Page -->
+          <header class="dash-header">
+              <div class="container text-center">
+                  <div class="over-lay">
+                      <div class="dash-heading">
+                          <h1>Account Setting</h1>
+                      </div>
+                  </div>
+              </div>
+          </header>
+          <!-- Start Dashboard Page-->
+      </div>
+      <div class="col-xs-12">
+        <div class="profile-add">
+            <div class="row">
+                <div class="col-xs-12 text-left profile-form">
+                    <form method="post">
+                        {% csrf_token %}
+                        <h4>Are you sure you want to delete {{ job.job_title }}</h4>
+                        
+                        <input type="submit" value="delete">
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+{% endblock %}

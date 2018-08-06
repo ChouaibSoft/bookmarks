@@ -1,0 +1,198 @@
+{% extends "dash-base.html" %}
+{% load static %}
+{% load comments_xtd %}
+{% load comments %}
+{% block title %}{{ project.project_title }}{% endblock %}
+
+
+{% block content %}
+
+<!-- Start Dashboard Page => Post your Resume-->
+<div class="content">
+    <div class="row">
+      <div class="col-xs-12">
+          <!-- Start Header Dashboard Page -->
+          <header class="dash-header">
+              <div class="container text-center">
+                  <div class="over-lay">
+                      <div class="dash-heading">
+                          <h1>{{ project.job_title }}</h1>
+                      </div>
+                  </div>
+              </div>
+          </header>
+          <!-- Start Dashboard Page-->
+      </div>
+      <div class="col-xs-12 col-md-9">
+        <div class="dashboard-body">
+            <div class="project-post">
+                <div class="row">
+                  <div class="project">
+                      <div class="col-xs-2 col-sm-1">
+                        <div class="project-image">
+                            <a href="{{ project.user.profile.get_absolute_url }}"><img src="{{ project.categorie.image.url }}" class="img-responsive img-thumbnail"></a>
+                        </div>
+                      </div>
+                      <div class="col-xs-10 col-sm-11">
+                        <div class="project-header">
+                          <a href="{{ project.get_absolute_url }}">{{ project.project_title }}</a>
+                          <i class="fa fa-calendar"></i><span>Il y'a {{ project.created|timesince }}</span>
+                        </div>
+                      </div>
+                      <div class="col-xs-12">
+                        <div class="project-information">
+                          <p>{{ project.description |linebreaks }}</p>
+                          <ul class="list-unstyled project-detail">
+                             <li>
+                                 Adresse : <span>{{ project.wilaya }}, {{ project.commune }}</span>
+                             </li>
+                             <li>
+                                Prix : <span> 65.00DA</span>
+                             </li>
+                             <li>
+                                 Type de Payment : <span> Par Semaine</span>
+                             </li>
+                             <li>
+                                Compétences requises :
+                                {% if profile.specialite %}
+                                    {% for specialite in project.specialite.all %}
+                                        <span>
+                                            {{ specialite }}{% if not forloop.last %},{% endif %}
+                                        </span>
+                                    {% endfor %}
+                                {% endif %}
+                             </li>
+                             <li>
+                                 Numero Telephone : <span>{{ project.phone }} {% if project.phone1 %}| {{  project.phone1 }}{% endif %}</span>
+                             </li>
+                          </ul>
+                          <ul class="list-unstyled">
+                             {% get_comment_count for project as comment_count %}
+                             <li>
+                                {% with total_follows=project.users_follow.count users_follow=project.users_follow.all %}
+                                    <a href="#" data-id="{{ project.id }}" data-action="{% if request.user in users_follow %} un{% endif %}follow" class="follow button">
+                                        <div class="project-follow">
+                                        <span class="count">
+                                            <i class="fa fa-thumbs-up"></i>
+                                            <span class="total">{{ total_follows }}</span>
+                                        </span>
+                                        intéressé{{ total_follows|pluralize }}
+                                    </div>
+                                    </a>
+                                {% endwith %}
+                             </li>
+                            <li class="commenter"><i class="fa fa-comments"></i> {{ comment_count }} <span class="hidden-xs"> Commenter</span></li>
+                             <li><a href="#"><i class="fa fa-share "></i>10 <span class="hidden-xs"> Parteger</span></a></li>
+                          </ul>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+                <!-- Start Comment Secton -->
+                 {% if comment_count %}
+                 <div class="col-xs-12  comments">
+                     {% if comment_count > 3 %}
+                         <a href="#" style="margin:10px 50px">Voir les commentaires précédents..</a>
+                     {% endif  %}
+                    {% get_last_xtdcomments 3 as comment_list for project.project %}
+                    {% for comment in comment_list %}
+                     <div class="comment-section">
+                       <div class="row">
+                           <div class="col-xs-2 col-sm-2">
+                            <div class="comment-poster-image">
+                              <img src="{{ comment.user.profile.image.url }}" class="img-responsive">
+                            </div>
+                          </div>
+                          <div class="col-xs-10 col-sm-10">
+                            <div class="comment-body">
+                                  <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user.first_name}} {{ comment.user.last_name }}<span> -{{ comment.submit_date | timesince }}</span></a></p>
+                                  <p>{{ comment.comment }}</p>
+                            </div>
+                          </div>
+                        </div>
+                       </div>
+                      {% endfor %}
+                     <div class="post-comment" style="display: block">
+                      <div class="row">
+                          <div class="col-xs-3 col-sm-2 col-md-1">
+                            <div class="comment-poster-image">
+                              <img src="{{ profile.image.url }}" class="img-responsive">
+                            </div>
+                          </div>
+                          <div class="col-xs-8 col-sm-9 col-md-10">
+                            <div class="comment-body">
+                                {% get_comment_form for project as form %}
+                                <div id="comment_form">
+                                    {% render_comment_form for project %}
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                    </div>
+                    </div>
+                 {% endif %}
+                  <div class="post-comment">
+                      <div class="row">
+                          <div class="col-xs-3 col-sm-2 col-md-1">
+                            <div class="comment-poster-image">
+                              <img src="{{ profile.image.url }}" class="img-responsive">
+                            </div>
+                          </div>
+                          <div class="col-xs-8 col-sm-9 col-md-10">
+                            <div class="comment-body">
+                                {% get_comment_form for project as form %}
+                                <div id="comment_form">
+                                    {% render_comment_form for project %}
+                                </div>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                <!-- End Comment Section -->
+            </div>
+        </div>
+      </div>
+</div>
+<!-- Start Dashboard Page => Post your Resume -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+
+  </script>
+{% endblock %}
+
+{% block domready %}
+    $('a.follow').click(function(e){
+        e.preventDefault();
+        $.post('{% url "project:follow" %}',
+            {
+                id: $(this).data('id'),
+                action: $(this).data('action')
+            },
+            function(data){
+                if (data['status'] == 'ok')
+                {
+                    var previous_action = $('a.follow').data('action'),
+                        divfollow = $("a.follow").find(".project-follow");
+
+                    // toggle data-action
+                    $('a.follow').data('action', previous_action == 'follow' ? 'unfollow' : 'follow');
+
+
+                    if(previous_action == "follow"){
+                        divfollow.addClass("follows");
+                    }
+                    else{
+                        divfollow.removeClass("follows");
+                    }
+
+
+
+                    // update total follows
+                    var previous_follows = parseInt($('span.count .total').text());
+                    $('span.count .total').text(previous_action == 'follow' ? previous_follows + 1 : previous_follows - 1);
+                }
+        });
+
+    });
+{% endblock %}

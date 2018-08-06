@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block title %}Create an account{% endblock %}
+
+{% block content %}
+<section class="user-login">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <h1 class="login-title text-center">Crée un  Compte</h1>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt <br>ut laoreet dolore magna aliquam erat volutpat.</p>
+            </div>
+            <div class="col-xs-12 col-md-6 col-md-offset-3 login-form sign-in-form">
+                <form action="." id="registrationForm" method="post"
+                                 data-validate-username-url="{% url 'validate_username' %}"
+                                 data-validate-email-url="{% url 'validate_email' %}">
+                    <div class="forms sign-in">
+                        {{ user_form.as_p }}
+                        {% csrf_token %}
+                    </div>
+                    <input type="submit" disabled class="submit sign-in-submit"  value="Crée mon Compte">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+        <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+  <script>
+
+    /*
+    * Username Check in Not Exist!
+    * */
+    var verify = ["False", "False", "False", "False"];
+    var id_username = $("#id_username"),
+        id_email = $("#id_email"),
+        id_password = $("#id_password"),
+        id_password2 = $("#id_password2"),
+        submit = $("#registrationForm").find(".submit"),
+        not_valid = $(".not-valid"),
+        valid = $(".valid");
+        not_valid.parent("div").css("position", "relative");
+
+    id_username.keyup(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: form.attr("data-validate-username-url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            id_username.css("border", "2px solid #d9534f");
+            if(!$(".username-exist").length){
+                id_username.after("<p class='username-exist'>Cet Username existe déjà !</p>" );
+                verify[0] = "False";
+                $("<i class='fa fa-times  not-valid'></i>").insertBefore(id_username);
+                $("#id_username").siblings(".valid").remove();
+            }
+          }else{
+              id_username.css("border", "2px solid #5cb85c");
+              $(".username-exist").remove();
+              verify[0] = "True";
+              $("<i class='fa fa-check  valid'></i>").insertBefore(id_username);
+              $("#id_username").siblings(".not-valid").remove();
+
+          }
+        }
+      });
+    });
+    id_email.change(function () {
+      var form = $(this).closest("form");
+      $.ajax({
+        url: form.attr("data-validate-email-url"),
+        data: form.serialize(),
+        dataType: 'json',
+        success: function (data) {
+          if (data.is_taken) {
+            id_email.css("border", "2px solid #d9534f");
+            if(!$('.email-exist').length){
+                id_email.after("<p class='email-exist'>Cet Email existe déjà !</p>" );
+                verify[1] = "False";
+                $("<i class='fa fa-times  not-valid'></i>").insertBefore(id_email);
+                $("#id_email").siblings(".valid").remove();
+            }
+          }else{
+              id_email.css("border", "2px solid #5cb85c");
+              $(".email-exist").remove();
+              verify[1] = "True";
+              $("<i class='fa fa-check  valid'></i>").insertBefore(id_email);
+              $("#id_email").siblings(".not-valid").remove();
+          }
+        }
+      });
+    });
+    id_password.keyup(function () {
+        if ($(this).val().length <8 ){
+            id_password.css("border", "2px solid #d9534f");
+            if(!$('.password-error').length){
+                id_password.after("<p class='password-error'>la longueur du mot de passe doit être supérieure à 8 caractères !</p>" );
+                verify[2] = "False";
+                $("<i class='fa fa-times  not-valid'></i>").insertBefore(id_password);
+                $("#id_password").siblings(".valid").remove();
+            }
+        }else{
+              id_password.css("border", "2px solid #5cb85c");
+              $(".password-error").remove();
+              verify[2] = "True";
+              $("<i class='fa fa-check  valid'></i>").insertBefore(id_password);
+              $("#id_password").siblings(".not-valid").remove();
+        }
+    });
+    id_password.keyup(function () {
+        if (id_password2.val().length > 0){
+            if ($(this).val() != id_password2.val()) {
+                id_password2.css("border", "2px solid #d9534f");
+                if (!$('.password-not-match').length) {
+                    id_password2.after("<p class='password-not-match'>mot de passe ne correspond pas !</p>");
+                    verify[2] = "False";
+                    $("<i class='fa fa-times  not-valid'></i>").insertBefore(id_password2);
+                    $("#id_password2").siblings(".valid").remove();
+                }
+            }else{
+                  id_password2.css("border", "2px solid #5cb85c");
+                  $(".password-not-match").remove();
+                  verify[2] = "True";
+                  $("<i class='fa fa-check  valid'></i>").insertBefore(id_password2);
+                  $("#id_password2").siblings(".not-valid").remove();
+            }
+        }
+    });
+    id_password2.keyup(function () {
+        if (id_password.val().length > 0){
+            if ($(this).val() != id_password.val()) {
+                id_password2.css("border", "2px solid #d9534f");
+                if (!$('.password-not-match').length) {
+                    id_password2.after("<p class='password-not-match'>mot de passe ne correspond pas !</p>");
+                    verify[3] = "False";
+                    $("<i class='fa fa-times  not-valid'></i>").insertBefore(id_password2);
+                    $("#id_password2").siblings(".valid").remove();
+                }
+            }else{
+                  id_password2.css("border", "2px solid #5cb85c");
+                  $(".password-not-match").remove();
+                  verify[3] = "True";
+                  $("<i class='fa fa-check  valid'></i>").insertBefore(id_password2);
+                  $("#id_password2").siblings(".not-valid").remove();
+            }
+        }
+    });
+    var input = $('input');
+
+input.on('change blur', function() {
+
+    if(verify.includes("False")) {
+        console.log("no");
+        submit.prop("disabled", true).css({"background-color": "#fecb1680", "cursor": "not-allowed"});
+    }else if (!(verify.includes("False"))){
+        console.log("yes");
+        submit.attr("disabled", false).css({"background-color": "#fecb16", "cursor": "pointer"});
+    }
+});
+  </script>
+{% endblock %}

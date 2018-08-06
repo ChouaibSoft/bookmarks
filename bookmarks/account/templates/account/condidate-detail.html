@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}{{ user.first_name }} {{ user.last_name }} Profile{% endblock %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+ <!-- Start Header Section -->
+<header class="condidate-detail-header">
+    <div class="overlay">
+        <div class="container">
+            <div class="parent">
+                <div class="child">
+                    <div class="row">
+                        <div class="col-xs-12  col-md-4">
+                            <div class="image">
+                                <img src="{% if condidate.image %}{{ condidate.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}">
+                            </div>
+                        </div>
+                        <div class="col-xs-12  col-md-8">
+                            <div class="profile-information">
+                                <h1>{{ user.first_name }} {{ user.last_name }}</h1>
+                                <ul class="list-unstyled">
+                                    <li><i class="fa fa-map-marker"></i>{{ condidate.commune }}, {{ condidate.wilaya }}</li>
+                                    <li>Profession: </li>
+                                    <li>{{ condidate.profession}}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!--  Start Header Section -->
+ <section>
+     <div class="container">
+        <div class="contact-condidate">
+            <div class="row">
+                <div class="col-xs-12 col-md-8 col-sm-offset-4">
+                    <div class="row">
+                       <div class="col-xs-6 col-md-4">
+                             <input class="resume-contact-button" value="Contact Condidate" type="button">
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                        {% with total_likes=condidate.users_like.count users_like=condidate.users_like.all %}
+                            <a href="#" data-id="{{ condidate.id }}" data-action="{% if request.user in users_like %} un{% endif %}like" class="like button">
+                                <div class="profile-like">
+                                <span class="count">
+                                    <i class="fa fa-thumbs-up"></i>
+                                    <span class="total">{{ total_likes }}</span>
+                                </span>
+                                j'aime
+                            </div>
+                            </a>
+                        {% endwith %}
+                        </div>
+                        <div class="col-xs-2 col-md-4">
+                            <ul class="list-unstyled pull-right share-print">
+                                <li><a href="#"><i class="fa fa-download "></i></a></li>
+                                <li><a href="#"><i class="fa fa-print"></i></a></li>
+                                <li><a href="#"><i class="fa fa-share-alt "></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-offset-4 col-xs-12 col-md-8">
+                    <div class="social-information pull-left">
+                        <label><i class="fa fa-envelope "></i> Email : <span>{{ user.email }}</span></label>
+                        <label><i class="fa fa-phone"></i> Phone : <span>{{ condidate.phone }}/ {{ condidate.phone1 }}</span></label>
+                        <label><i class="fa fa-address-card "></i> Adresse : <span>{{ condidate.commune }}, {{ condidate.wilaya }}</span></label>
+                        <label><i class="fa fa-mail"></i> Site Web : <a href="{{ condidate.site_web }}">{{ condidate.site_web }}</a></label>
+                        <label><i class="fa fa-mail"></i> Social Media : <span>
+                                                  <a href="{{ condidate.facebook_url }}"><i class="fa fa-facebook"></i></a>
+                                                  <a href="{{ condidate.twitter_url }}"><i class="fa fa-twitter"></i></a>
+                                                  <a href="{{ condidate.youtube_url }}"><i class="fa fa-youtube"></i></a>
+                                              </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
+ </section>
+<!-- End  Header Section -->
+ <!-- Start Condidate Profile Detail -->
+ <section>
+     <div class="container">
+         <div class="row">
+             <div class="col-xs-12 profile-details">
+                <div class="row">
+                    <div class="col-xs-12 col-md-3">
+                       <h2>Qui Suis Je</h2>
+                    </div>
+                    <div class="col-xs-12 col-md-9">
+                        <p>
+                            {{ condidate.overview|linebreaks }}
+                        </p>
+                    </div>
+                    <div class="mj_divider"></div>
+                    <div class="col-xs-12 col-md-3">
+                           <h2>Experience</h2>
+                    </div>
+                    <div class="col-xs-12 col-md-9">
+                        <p>
+                            {{ condidate.experience|linebreaks }}
+                        </p>
+                    </div>
+                    <div class="mj_divider"></div>
+                    <div class="col-xs-12 col-md-3">
+                           <h2>Specialitées</h2>
+                    </div>
+                    <div class="col-xs-12 col-md-9">
+                        {% if condidate.specialite %}
+                            <ul class="list-unstyled">
+                                {% for specialite in condidate.specialite.all %}
+                                    <li>{{ specialite }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                    <div class="mj_divider"></div>
+                </div>
+             </div>
+         </div>
+     </div>
+ </section>
+ <!-- End Condidate Profile Detail -->
+
+{% endblock %}
+
+
+
+{% block domready %}
+    $('a.like').click(function(e){
+        e.preventDefault();
+        $.post('{% url "like" %}',
+            {
+                id: $(this).data('id'),
+                action: $(this).data('action')
+            },
+            function(data){
+                if (data['status'] == 'ok')
+                {
+                    var previous_action = $('a.like').data('action'),
+                        divLike = $("a.like").find(".profile-like");
+
+                    // toggle data-action
+                    $('a.like').data('action', previous_action == 'like' ? 'unlike' : 'like');
+
+
+                    if(previous_action == "like"){
+                        divLike.addClass("liked");
+                    }
+                    else{
+                        divLike.removeClass("liked");
+                    }
+
+
+
+                    // update total likes
+                    var previous_likes = parseInt($('span.count .total').text());
+                    $('span.count .total').text(previous_action == 'like' ? previous_likes + 1 : previous_likes - 1);
+                }
+        });
+
+    });
+{% endblock %}
+

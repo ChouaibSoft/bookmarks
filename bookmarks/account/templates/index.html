@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% block title %}Eureka | Accueil {% endblock %}
+{% load static %}
+{% block content %}
+
+<style>
+/* Start NavBar */
+
+.navbar{
+    background: transparent;
+    padding: 30px 0 15px 0;
+    margin: 0;
+    position: fixed;
+    top:0;
+    right: 0;
+    left: 0;
+    border:none;
+    z-index: 1030;
+    transition: all .5s ease-in-out;
+}
+.navbar .navbar-collapse li a{
+    color: #111;
+}
+.navbar .navbar-collapse li a:hover{
+    color: #fecb16 !important;
+    border-bottom: 1px solid #fecb16
+}
+.navbar .navbar-collapse .dropdown 	a:hover{
+    color: #fff;
+    border-bottom: none;
+}
+/* End NavBar */
+</style>
+<!-- Start Header -->
+<section class="slider">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner" role="listbox">
+            <div class="item active">
+              <img src="http://wordpress.vinagecko.net/t/mimosa/wp-content/uploads/2017/12/slider-011.jpg" alt="slider-image">
+              <div class="carousel-caption">
+                <h2 class="h1">Élégant<br>Sac à main féminin</h2>
+                <p class="lead">Discover the collection as styled by fashion icon Caroline Issa in our new season
+                <a href="#"><button>
+                     Detail
+                </button></a>
+              </div>
+            </div>
+           <div class="item">
+              <img src="http://wordpress.vinagecko.net/t/mimosa/wp-content/uploads/2017/12/slider-012.jpg" alt="slider-image">
+              <div class="carousel-caption">
+                <h2 class="h1">Femmes<br>Lookbook Vêtements</h2>
+                <p class="lead">Discover the collection as styled by fashion icon Caroline Issa in our new season
+                campaign.</p>
+                <a href="#"><button>
+                     Detail
+                </button></a>
+              </div>
+            </div>
+           <div class="item">
+              <img src="http://wordpress.vinagecko.net/t/mimosa/wp-content/uploads/2017/12/slider-012.jpg" alt="slider-image">
+              <div class="carousel-caption">
+                <h2 class="h1">Femmes<br>Lookbook Vêtements</h2>
+                <p class="lead">Discover the collection as styled by fashion icon Caroline Issa in our new season
+                campaign.</p>
+                <a href="#"><button>
+                     Detail
+                </button></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <a class="slide-button slide-button-left" href="#carousel-example-generic" role="button" data-slide="prev">
+                <i class="fa fa-chevron-left"></i>
+          </a>
+          <a class="slide-button slide-button-right" href="#carousel-example-generic" role="button" data-slide="next">
+                <i class="fa fa-chevron-right"></i>
+          </a>
+        </div>
+</section>
+<!-- End Header -->
+
+<!-- Start Our Collection -->
+
+<section class="our-collection">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-4">
+                 <div class="image">
+                    <img src="http://devitems.com/preview/mimosa/img/banner/15.jpg">
+                     <h3>Pour  hommes<br>
+                    Summer Collection</h3>
+                    <a class="#"><span>Découvrir..</span></a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                 <div class="image">
+                    <img src="http://devitems.com/preview/mimosa/img/banner/16.jpg">
+                     <h3>Pour  Femme<br>
+                    Vêtements Originaux</h3>
+                    <a class="#"><span>Découvrir..</span></a>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4">
+                 <div class="image">
+                    <img src="http://devitems.com/preview/mimosa/img/banner/17.jpg">
+                     <h3>Accessoires<br>
+                    Collection de Sacs à Main</h3>
+                    <a class="#"><span>Découvrir..</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- End Our Collection -->
+
+
+<!-- Start Recent Posted Profile -->
+
+<section class="condidates-seach recent-posted-profile">
+    <div class="container">
+        <div class="section-title">
+            <h2 class="index-section-title">Recent Profiles Poster</h2>
+        </div>
+        {% for condidate in  condidates %}
+        <div class="condidates-result">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="col-xs-4 col-sm-3 col-md-1">
+                        <div class="image">
+                            <a href="{{ condidate.get_absolute_url }}"><img src="{% if condidate.image %}{{ condidate.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}"></a>
+                        </div>
+                    </div>
+                    <div class="col-xs-8 col-sm-9 col-md-3">
+                        <div class="name">
+                             <a href="{{ condidate.get_absolute_url }}"><h2>{{ condidate.user.last_name }} {{ condidate.user.first_name }}</h2></a>
+                            <span>{{ condidate.profession }}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-2 location">
+                        <span><i class="fa fa-map-marker"></i> {{ condidate.commune }}, {{ condidate.wilaya }}</span>
+                    </div>
+                    <div class="col-xs-12 col-md-6 skills">
+                        {% if condidate.specialite %}
+                            <ul class="list-unstyled">
+                                {% for specialite in condidate.specialite.all %}
+                                    <li>{{ specialite }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+         </div>
+        {% endfor %}
+        <div class="view-more">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a href="{% url "condidates" %}">Voir Tous les Profiles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Recent Posted Profile -->
+
+
+<!-- Start Site Web Stats -->
+<section class="site-stats">
+    <div class="container">
+        <div class="text-center">
+            <h2>Eureka Site Web Stats</h2>
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed <br> diam nonummynibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="col-xs-5 stat-image">
+                    <img src="http://wordpress-127012-368632.cloudwaysapps.com/wp-content/uploads/2016/02/count1-70x75.png" align="stat-iamge">
+                </div>
+                <div class="col-xs-7 stat-info">
+                    <span>6.389</span>
+                    <p>Projets Publier</p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="col-xs-5 stat-image">
+                    <img src="http://wordpress-127012-368632.cloudwaysapps.com/wp-content/uploads/2016/02/count2-70x75.png" align="stat-iamge">
+                </div>
+                <div class="col-xs-7 stat-info  ">
+                    <span>6.389</span>
+                    <p>Produits Publier</p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="col-xs-5 stat-image">
+                    <img src="http://wordpress-127012-368632.cloudwaysapps.com/wp-content/uploads/2016/02/count4-70x75.png" align="stat-iamge">
+                </div>
+                <div class="col-xs-7 stat-info  ">
+                    <span>6.389</span>
+                    <p>Profile Publier</p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+                <div class="col-xs-5 stat-image">
+                    <img src="http://wordpress-127012-368632.cloudwaysapps.com/wp-content/uploads/2016/02/count3-70x75.png" align="stat-iamge">
+                </div>
+                <div class="col-xs-7 stat-info  ">
+                    <span>5.358</span>
+                    <p>Membres</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Start Site Web Stats -->
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script>
+    $(document).ready(function() {
+    	 // Navbar options
+    $(window).scroll(function(){
+         if($(window).scrollTop() >= 80){
+            $(".navbar").css({
+                backgroundColor : "#111",
+                padding:"15px 0",
+                opacity:".9",
+            });
+            $(".navbar-collapse a").css("color", "#fff");
+         }else{
+            $(".navbar").css({
+                backgroundColor : "transparent",
+                padding:"30px 0 15px 0",
+            });
+            $(".navbar-collapse a").css("color", "#111");
+         }
+    });
+       // Box Animation
+       var focus = $(".product");
+       focus.hover
+       (
+        function(){
+           $(this).find(".product-over").fadeIn(400);
+           $(this).find(".promotion").animate({
+               top:"-70px"
+           },400)
+        },
+            function(){
+            $(this).find(".product-over").fadeOut(400);
+            $(this).find(".promotion").animate({
+               top:"10px"
+           },400)
+        }
+        )
+    })
+    $('.carousel').carousel();
+</script>
+
+
+{% endblock  %}

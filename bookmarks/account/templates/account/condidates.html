@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block title %}Condidates{% endblock %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+{% block content %}
+
+
+  <!-- Start Header Section -->
+        <header class="condidate-project-header">
+
+        </header>
+        <!--  End Header Section -->
+
+         <!-- Start  Condidates Search  -->
+        <section class="condidates-seach">
+            <div class="container">
+                <div class="condidates-filtring">
+                <form method="get" id="searchForm"
+                     data-communes-url="{% url "ajax_load_communes" %}"
+                     data-specialites-url="{% url "ajax_load_specialites" %}" novalidat>
+                    <div class="by-location">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="col-xs-12 col-md-4">
+                                    {% render_field filter.form.profession class="form-control" placeholder="Mot clé" %}
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    {% render_field filter.form.wilaya class="form-control"%}
+                                </div>
+                                <div class="col-xs-6 col-md-3">
+                                    {% render_field filter.form.commune class="form-control"%}
+                                </div>
+                                <div class="col-xs-12 col-md-2">
+                                   <div class="search">
+                                       <button type="submit">Rechercher</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="by-profession">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="col-xs-6 col-md-4">
+                                    {% render_field filter.form.categorie class="form-control"%}
+                                </div>
+                                <div class="col-xs-6 col-md-4">
+                                    {% render_field filter.form.specialite  class="form-control mdb-select" multiple="multiple"%}
+                                </div>
+                                <div class="col-xs-12 col-md-4 radio">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="count-resultat">
+                        <span>
+                            {% if filter.qs.count > 1 %}<strong>{{ filter.qs.count  }} </strong> Resultats Trouvée
+                            {% elif   filter.qs.count == 1  %}
+                                <strong>1</strong> Resultat Trouvée  {% else %} Aucune Resultat Trouvée
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% for condidate in condidates_filter %}
+                <div class="condidates-result">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="col-xs-4 col-md-1">
+                                <div class="image">
+                                    <a href="{{ condidate.get_absolute_url }}"><img src="{% if condidate.image %}{{ condidate.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}"></a>
+                                </div>
+                            </div>
+                            <div class="col-xs-8 col-md-3">
+                                <div class="name">
+                                     <a href="{{ condidate.get_absolute_url }}"><h2>{{ condidate.user.last_name }} {{ condidate.user.first_name }}</h2></a>
+                                    <span>{{ condidate.profession }}</span>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-md-2 location">
+                                <span><i class="fa fa-map-marker"></i> {{ condidate.commune }}, {{ condidate.wilaya }}</span>
+                            </div>
+                            <div class="col-xs-12 col-md-6 skills">
+                                {% if condidate.specialite %}
+                                    <ul class="list-unstyled">
+                                        {% for specialite in condidate.specialite.all %}
+                                            <li>{{ specialite }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                {% endfor %}
+            </div>
+        </section>
+         <section>
+            <div class="container">
+                <div class="paginations">
+                    {% include "account/pagination.html" with page=condidates_filter %}
+                </div>
+            </div>
+         </section>
+         <!-- End Condidates Search  -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src='http://harvesthq.github.io/chosen/chosen.jquery.js'></script>
+
+<script>
+$("#id_commune").find("option").not(':first').fadeOut();
+$("#id_specialite").find("option").fadeOut();
+
+    $('#id_wilaya option:first').text('Tous Wilaya');
+    $('#id_commune option:first').text('Tous Commune');
+    $('#id_categorie option:first').text('Tous Categorie');
+
+$("#id_wilaya").change(function () {
+  var url = $("#searchForm").attr("data-communes-url");
+  var wilayaId = $(this).val();
+
+  $.ajax({
+    url: url,
+    data: {
+      'wilaya': wilayaId
+    },
+    success: function (data) {
+      $("#id_commune").html(data);
+    }
+  });
+});
+$("#id_categorie").change(function () {
+  var url = $("#searchForm").attr("data-specialites-url");
+  var categorieId = $(this).val();
+  $.ajax({
+    url: url,
+    data: {
+      'categorie': categorieId
+    },
+    success: function (data) {
+       $("#id_specialite").html(data);
+       $("#id_specialite").trigger("chosen:updated");
+       $("#id_specialite").chosen();
+
+    }
+  });
+});
+
+</script>
+{% endblock %}

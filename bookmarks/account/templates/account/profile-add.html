@@ -1,0 +1,203 @@
+{% extends "dash-base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Publier votre Profile{% endblock %}
+
+
+{% block content %}
+
+<!-- Start Dashboard Page => Post your Resume-->
+<div class="content">
+    <div class="row">
+      <div class="col-xs-12">
+          <!-- Start Header Dashboard Page -->
+          <header class="dash-header">
+              <div class="container text-center">
+                  <div class="over-lay">
+                      <div class="dash-heading">
+                          <h1>Publier votre Profile</h1>
+                      </div>
+                  </div>
+              </div>
+          </header>
+          <!-- Start Dashboard Page-->
+      </div>
+      <div class="col-xs-12">
+        <div class="profile-add">
+            <div class="row">
+                <div class="col-xs-12 text-left profile-form">
+                    <form action="." enctype="multipart/form-data"
+                          method="post" id="personForm"
+                          data-specialites-url="{% url 'ajax_load_specialites' %}"
+                          data-communes-url="{% url 'ajax_load_communes' %}" novalidat>
+                        {% csrf_token %}
+                    <div class="col-xs-12 form">
+                        <div class="col-xs-12">
+                            {{ form.type.label_tag }}
+                            {% render_field form.type class="form-control"  %}
+                        </div>
+                        <div class="col-xs-12">
+                            {{ form.name.label_tag }}
+                            {% render_field form.name class="form-control" %}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ user_form.first_name.label_tag }}
+                            {% render_field user_form.first_name class="form-control" %}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ user_form.last_name.label_tag }}
+                            {% render_field user_form.last_name class="form-control" %}
+                        </div>
+                        <div class="col-xs-12">
+                            {{ form.profession.label_tag }}
+                            {% render_field form.profession class="form-control" %}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.categorie.label_tag }}
+                            {% render_field form.categorie class="form-control" %}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.specialite.label_tag }}
+                            {% render_field form.specialite  class="form-control" %}
+
+                        </div>
+                        <div class="col-xs-12">
+                            {{ form.overview.label_tag }}
+                            {% render_field form.overview class="form-control" %}
+                        </div>
+                        <div class="col-xs-12">follow
+                            {{ form.experience.label_tag }}
+                            {% render_field form.experience class="form-control" %}
+                        </div>
+                        <div class="col-xs-12">
+                            {{ form.date_of_birth.label_tag }}
+                            {% render_field form.date_of_birth class="form-control" %}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.wilaya.label_tag }}
+                            {% render_field form.wilaya class="form-control"%}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.commune.label_tag }}
+                            {% render_field form.commune class="form-control"%}
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.facebook_url.label_tag }}
+                            {% render_field form.facebook_url class="form-control"%}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.twitter_url.label_tag }}
+                            {% render_field form.twitter_url class="form-control"%}
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.youtube_url.label_tag }}
+                            {% render_field form.youtube_url class="form-control"%}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.site_web.label_tag }}
+                            {% render_field form.site_web class="form-control"%}
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.phone.label_tag }}
+                            {% render_field form.phone class="form-control"%}
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            {{ form.phone1.label_tag }}
+                            {% render_field form.phone1 class="form-control"%}
+                        </div>
+                        <div class="col-xs-12">
+                            {{ form.image.label_tag }}
+                            {% render_field form.image class="form-control"%}
+                        </div>
+                    </div>
+                        <input type="hidden" name="next" value="{{ next }}" />
+                        <p><input type="submit"  class="submit" value="Publier ->"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Start Dashboard Page => Post your Resume -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script>
+
+
+    $("#id_wilaya").change(function () {
+      var url = $("#personForm").attr("data-communes-url");
+      var wilayaId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'wilaya': wilayaId
+        },
+        success: function (data) {
+          $("#id_commune").html(data);
+        }
+      });
+    });
+    $("#id_categorie").change(function () {
+      var url = $("#personForm").attr("data-specialites-url");
+      var categorieId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'categorie': categorieId
+        },
+        success: function (data) {
+           $("#id_specialite").html(data);
+           $("#id_specialite").trigger("chosen:updated");
+           $("#id_specialite").chosen();
+        }
+      });
+    });
+
+    $(document).ready(function () {
+
+        $("#id_type" ).prepend("<option selected>.........</option>");
+        $("#id_commune, #id_specialite, #id_name, #id_first_name, #id_last_name").fadeOut();
+        $("#id_commune, #id_specialite, #id_name, #id_first_name, #id_last_name").siblings().fadeOut();
+
+        $("#id_type").find('option').click(function () {
+            if ($(this).attr("value") == 'proprietaire'){
+                $("#id_name").val('').slideUp(500).siblings().slideUp(500);
+                $("#id_first_name").slideDown(500).siblings().slideDown(500);
+                $("#id_last_name").slideDown(500).siblings().slideDown(500);
+            }else{
+                $("#id_first_name").val('').slideUp(500).siblings().slideUp(500);
+                $("#id_last_name").val('').slideUp(500).siblings().slideUp(500);
+                $("#id_name").slideDown(500).siblings().slideDown(500);
+            }
+        });
+        3
+
+
+        $("#id_commune, #id_specialite").fadeOut();
+        $("#id_commune, #id_specialite").siblings().fadeOut();
+        $("#id_wilaya").find('option').click(function () {
+            $("#id_commune").slideDown(500).siblings().slideDown(500);
+        });
+        $("#id_categorie").find('option').click(function () {
+            $("#id_specialite").slideDown().siblings().slideDown();
+            $("#id_specialite").fadeOut();
+        });
+        // Hide Placeholder On focus & Restore On Blur
+        var placeAttr = '';
+        $("[placeholder]").focus(function () {
+            placeAttr = $(this).attr('placeholder');
+            $(this).attr('placeholder', '');
+            $(this).addClass("input-focus");
+
+        }).blur(function () {
+            $(this).attr('placeholder', placeAttr);
+            $(this).removeClass("input-focus");
+        })
+    });
+  </script>
+{% endblock %}

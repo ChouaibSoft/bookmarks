@@ -1,0 +1,35 @@
+{% for project in projects %}
+<div class="job-post">
+    <div class="row">
+      <div class="col-xs-3 col-sm-1">
+        <div class="job-image">
+          <img src="{{ profile.image.url }}" class="img-responsive img-thumbnail">
+        </div>
+      </div>
+      <div class="col-xs-9 col-sm-11">
+        <div class="job-header">
+          <a href="#">{{ project.job_title }}</a>
+          <i class="fa fa-calendar"></i><span>Il y'a {{ project.created|timesince }} |</span>
+          <i class="fa fa-map-marker"></i><span>{{ project.wilaya }}, {{ project.commune }}</span>
+        </div>
+      </div>
+      <div class="col-xs-12">
+        <div class="job-information">
+          <p>{{ project.description |linebreaks }}</p>
+          <ul class="list-unstyled">
+             {% get_comment_count for project as comment_count %}
+
+<p>This event has {{ comment_count }} comments</p>
+            <li><a href="#"><i class="fa fa-comments"></i><span class="hidden-xs"> Commentaire</span></a></li>
+            <li><a href="#"><i class="fa fa-heart"></i>15 <span class="hidden-xs"> Interesser</span></a></li>
+            <li><a href="#"><i class="fa fa-share "></i>10 <span class="hidden-xs"> Parteger</span></a></li>
+
+
+          </ul>
+        </div>
+
+
+      </div>
+    </div>
+</div>
+{% endfor %}

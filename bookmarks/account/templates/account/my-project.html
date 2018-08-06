@@ -1,0 +1,71 @@
+{% extends "dash-base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Eureka | Mes Projets{% endblock %}
+
+
+{% block content %}
+
+<!-- Start Dashboard Page => Yours Projects Section -->
+<div class="content">
+    <div class="row">
+      <div class="col-xs-12">
+          <!-- Start Header Dashboard Page -->
+          <header class="dash-header">
+              <div class="container text-center">
+                  <div class="over-lay">
+                      <div class="dash-heading">
+                          <h1>Mon Espace</h1>
+                          <h3>Mes Projets !</h3>
+                      </div>
+                  </div>
+              </div>
+          </header>
+          <!-- Start Dashboard Page-->
+      </div>
+      <div class="col-xs-12 col-md-9">
+        <div class="dashboard-body">
+            {% for project in projects %}
+            <div class="project-post">
+                <div class="row">
+                  <div class="project">
+                      <div class="col-xs-2 col-sm-1">
+                        <div class="project-image">
+                            <a href="{{ project.user.profile.get_absolute_url }}"><img src="{{ project.categorie.image.url }}" class="img-responsive img-thumbnail"></a>
+                        </div>
+                      </div>
+                      <div class="col-xs-10 col-sm-11">
+                        <div class="project-header">
+                          <a href="{{ project.get_absolute_url }}">
+                              {{ project.project_title }}
+                               {% if project.status == "published" %}
+                                <span class="project-status-published">en Ligne</span>
+                               {% else %}
+                                <span class="project-status-draft">en Attende de Validation..</span>
+                               {% endif %}
+                          </a>
+                          <i class="fa fa-calendar-alt"></i><span>Il y'a {{ project.created|timesince}} </span>
+                        </div>
+                      </div>
+                      <div class="col-xs-12">
+                        <div class="project-information">
+                          <p>{{ project.description |linebreaks }}</p>
+                          <ul class="list-unstyled my-project-action">
+                              <a href="{{ project.get_absolute_url }}"><li><i class="fa fa-plus"></i>  <span class="hidden-xs"> Details</span></li></a>
+                              <a href="{% url "project:project-update" project.id%}"><li><i class="fa fa-edit"></i><span class="hidden-xs"> Modifier</span></li></a>
+                              <a href="{% url "project:project-delete" project.id%}"><li><i class="fa fa-trash-alt"></i><span class="hidden-xs"> Supprimer</span></li></a>
+                          </ul>
+                        </div>
+                     </div>
+                  </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+</div>
+<!-- Yours Projects Section -->
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+{% endblock %}

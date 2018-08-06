@@ -1,0 +1,371 @@
+/* Start Global */
+ *{
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    box-sizing: border-box;
+ }
+
+ body{
+ 	position: relative;
+ 	background-color: #f5f5f5
+
+ }
+ .login-title{
+    font-size: 65px;
+    text-transform: uppercase;
+    font-weight: 100;
+    letter-spacing: 3px;
+    font-family: 'Saira Extra Condensed', sans-serif;
+    font-weight: 100;
+    color: #000000;
+    float: left;
+    width: 100%;
+    margin: 0;
+    padding-bottom: 15px;
+    font-variant: small-caps;
+     display: inline;
+}
+ @media (max-width: 386px) {
+    .login-title{
+        font-size: 45px;
+    }
+ }
+.input-focus{
+    background-color: #fff;
+    border:2ps solid #00bff3;
+}
+.content{
+    margin: 100px 0;
+}
+/* End Global */
+
+/* Start NavBar */
+
+.navbar{
+    background: #111111;
+    padding: 30px 0px;
+}
+.navbar .navbar-collapse li a{
+	font-size: 14px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: normal;
+    text-decoration: none;
+    padding: 15px 14px;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+}
+.navbar .navbar-collapse li i{
+	margin-right: 5px;
+}
+.navbar .navbar-collapse  .search{
+	margin-left: 15px;
+}
+.navbar .navbar-collapse li a:hover{
+    color: #fecb16;
+    border-bottom: 1px solid #fecb16
+}
+.navbar .navbar-collapse .dropdown 	a:hover{
+    color: #fff;
+    border-bottom: none;
+}
+.navbar .navbar-collapse .dropdown img{
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin: -17px 6px;
+}
+.navbar .navbar-collapse .dropdown .dropdown-menu{
+	margin-top: 15px;
+	background-color: #fff;
+	border-top: 2px solid #fecb16;
+	border-radius:5%;
+	color:#000;
+	box-shadow: none;
+	padding-left: 10px;
+}
+.navbar .navbar-collapse .dropdown .dropdown-menu  a{
+	transition: all 0.3s;
+    color: #111111;
+    padding-bottom: 4px;
+    padding-top: 9px;
+}
+.navbar .navbar-collapse .dropdown .dropdown-menu  a:hover{
+	color: #00bff3;
+}
+.navbar .brand{
+	float: left;
+	width: 50%;
+	text-transform: uppercase;
+	margin-top: 10px;
+}
+
+/* End NavBar */
+
+/* Start Registration Form */
+.user-login{
+    padding: 0;
+}
+.user-login .login-form{
+    border-radius: 7%;
+    border-top:3px solid #b1d750;
+    background-color: #fff;
+    padding-top: 30px;
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 30px;
+}
+.user-login .sign-in-form{
+    border-top:3px solid #fecb16;
+}
+.user-login .login-form p {
+    font-size: 18px;
+    color:  #111111;
+    font-family: 'Roboto', sans-serif;
+    line-height: 23px;
+    font-weight: 400;
+}
+.user-login .login-form .forms{
+    padding: 40px 40px 0 40px;
+}
+.user-login .login-form .forms label{
+    display: none;
+}
+.user-login .login-form .sign-in label{
+    display: block;
+}
+.user-login .login-form .forms input{
+    width: 100%;
+    color: #111111;
+    font-size: 16px;
+    opacity: 1;
+    border: 1px solid transparent;
+    box-shadow: none;
+    height: auto;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+.user-login .login-form .submit{
+    background-color: #b1d750;
+    width: 100%;
+    height: 60px;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 7%;
+    margin-bottom: -2%;
+    border-radius: 10px;
+}
+.user-login .login-form .sign-in-submit{
+    background-color: #fecb16;
+}
+.user-login .login-form a{
+    text-decoration: none;
+    text-align: right;
+}
+.user-login .login-form label{
+    color: #716969;
+}
+.user-login .login-form .btn-block{
+    margin-top: 30px;
+    background-color: #b1d750;
+    height: 60px;
+    border: none;
+    color: #fff;
+    font-size: 25px;
+    -webkit-border-bottom-left-radius: 10%;
+    -webkit-border-bottom-right-radius: 10%;
+}
+/* End Registration Form  */
+
+/* Start Profile-Add Form */
+.profile-add .profile-header  p{
+    font-size: 18px;
+    color: #707070;
+    font-family: 'Roboto', sans-serif;
+    line-height: 23px;
+    font-weight: 400;
+}
+.profile-add .profile-header .sign-in-button{
+    display: inline-block;
+    background-color: #00bff3;
+    font-size: 18px !important;
+    margin-right: 50px;
+    position: relative;
+    padding: 17px 30px !important;
+    border-radius: 30px;
+    max-width: 150px !important;
+    text-decoration: none;
+    box-shadow: none;
+    cursor: pointer;
+    transition: all .5s ease-in-out;
+}
+.profile-add .profile-header .sign-in-button a{
+    text-decoration: none;
+    color: #fff;
+}
+.profile-add .profile-header .sign-in-button:hover{
+    background-color: transparent;
+    color: #00bff3;
+    border: 2px solid #00bff3;
+}
+.profile-add .profile-header .sign-in-button:hover a{
+    color: #00bff3;
+}
+.profile-add .profile-header  button:hover{
+    border:2px solid #00bff3;
+    background-color: #fff;
+    color: #00bff3
+}
+.profile-add .profile-header{
+    margin-bottom: 30px;
+}
+.profile-add .profile-form{
+    background-color: #fff;
+    border-top:3px solid #00bff3;
+    border-bottom:3px solid #00bff3;
+    border-radius: 15px;
+    padding: 0;
+}
+.profile-add .profile-form .form{
+    padding: 6% 13% 0% 13%;
+}
+.profile-add .profile-form label{
+    color: #111111;
+    text-transform: capitalize;
+    font-size: 15px;
+    margin: 20px 0 17px 0;
+}
+.profile-add .profile-form input{
+    width: 100%;
+    color: #111111;
+    font-size: 16px;
+    opacity: 1;
+    border: 1px solid transparent;
+    box-shadow: none;
+    height: auto;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+}
+.errorlist, .helptext{
+    display: none;
+}
+.profile-add .profile-form .submit{
+    background-color: #00bff3;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 7%;
+    margin-bottom: -1%;
+    border-radius: 13px;
+}
+@media(max-width:1010px){
+    .profile-add .profile-form .submit{
+        margin-bottom:-5%;
+    }
+}
+ .input-focus{
+     background-color: #fff !important;
+     border: 2px solid #00bff3 !important;
+ }
+.profile-add .profile-form select{
+    width: 100%;
+    color: #999999;
+    opacity: 1;
+    border: 1px solid transparent;
+    box-shadow: none;
+    height: auto;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.profile-add .profile-form textarea{
+    width: 100%;
+    height: auto;
+    color: #111111;
+    border: 1px solid transparent;
+    box-shadow: none;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    font-size: 15px;
+    resize: none;
+}
+/* Start Profile-Add Form */
+
+
+/*============Start Footer ================*/
+footer{
+    background-color:#1b1a1a;
+    padding: 2%;
+    color: #b7b0b0;
+    margin-bottom: 0;
+}
+footer .container .row >div:not(last-child){
+    margin-bottom: 3%;
+    margin-top: 3%;
+}
+footer .logo{
+    background-image: url(../images/if_simpline_41_2305621.png);
+    background-repeat: no-repeat;
+    height: 120px;
+    margin-bottom: 5%;
+    margin-top: 10%;
+}
+footer .container p{
+    font-size: 17px;
+    line-height: 30px;
+    text-indent: 35px;
+    text-transform: capitalize;
+}
+footer .container h3{
+    color: white;
+    text-transform: capitalize;
+    padding-bottom: 4%;
+    margin-bottom:20%;
+    border-bottom: 3px solid orangered;
+    border-bottom-right-radius: 50%;
+}
+footer .container ul li{
+    margin-bottom:10%;
+    text-transform: capitalize;
+    padding-bottom: 10%;
+    border-bottom: .5px solid #888383;
+    font-size: 16px;
+}
+footer .container .social li{
+	display: inline-block;
+	margin-right: 15px;
+	font-size: 20px;
+	border:none;
+	cursor: pointer;
+}
+footer .container ul li span{
+    margin-right: 4%;
+    border-bottom: 1px solid #888383;
+}
+footer .container .contacts .glyphicon{
+    margin-bottom: 5%;
+}
+footer .container i{
+	margin-right: 5px;
+}
+footer .container .contacts h4{
+    display: inline-block;
+    padding-bottom: 10%;
+    border-bottom: 1px solid #888383;
+    font-size: 16px;
+    line-height: 25px;
+}
+.copyright{
+    padding: 2%;
+    color: #bdb8b8;
+    font-size: 18px;
+    background-color: #383737;
+}
+/*============End Footer ================*/

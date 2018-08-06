@@ -1,0 +1,147 @@
+{% extends "dash-base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% block title %}Eureka | Déposer un Projet{% endblock %}
+
+{% block content %}
+
+        <!-- Start Dashboard Page => Post a Project -->
+                  <div class="content">
+                    <div class="row">
+                      <div class="col-xs-12">
+                          <!-- Start Header Dashboard Page -->
+                          <header class="dash-header">
+                              <div class="container text-center">
+                                  <div class="over-lay">
+                                      <div class="dash-heading">
+                                          <h1>Déposer un Projet</h1>
+                                      </div>
+                                  </div>
+                              </div>
+                          </header>
+                          <!-- Start Dashboard Page-->
+                      </div>
+                      <div class="col-xs-12">
+                        <div class="profile-add">
+                            <div class="row">
+                                <div class="col-xs-12 text-left profile-form project-form">
+                                    <form action="." enctype="multipart/form-data"
+                                          method="post" id="personForm"
+                                          data-specialites-url="{% url 'ajax_load_specialites' %}"
+                                          data-communes-url="{% url 'ajax_load_communes' %}" novalidat>
+                                        {% csrf_token %}
+                                        <div class="col-xs-12 form">
+                                            <div class="col-xs-12">
+                                                {{ form.project_title.label_tag }}
+                                                {% render_field form.project_title class="form-control"  %}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.categorie.label_tag }}
+                                                {% render_field form.categorie class="form-control" %}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.specialite.label_tag }}
+                                                {% render_field form.specialite class="form-control" %}
+                                            </div>
+                                            <div class="col-xs-12">
+                                                {{ form.description.label_tag }}
+                                                {% render_field form.description class="form-control" %}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.prix.label_tag }}
+                                                {% render_field form.prix class="form-control" %}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.pay_type.label_tag }}
+                                                {% render_field form.pay_type class="form-control"  %}
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.wilaya.label_tag }}
+                                                {% render_field form.wilaya class="form-control"%}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.commune.label_tag }}
+                                                {% render_field form.commune class="form-control"%}
+                                            </div>
+                                            <div class=clearfix></div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.phone.label_tag }}
+                                                {% render_field form.phone class="form-control"%}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form.phone1.label_tag }}
+                                                {% render_field form.phone1 class="form-control"%}
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="next" value="{{ next }}" />
+                                        <p><input type="submit"  class="submit" value="Publier ->"></p>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        <!-- Start Dashboard Page => Post a Project -->
+    <script src='http://harvesthq.github.io/chosen/chosen.jquery.js'></script>
+  <script>
+
+    $("#id_wilaya").change(function () {
+      var url = $("#personForm").attr("data-communes-url");
+      var wilayaId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'wilaya': wilayaId
+        },
+        success: function (data) {
+          $("#id_commune").html(data);
+        }
+      });
+    });
+    $("#id_categorie").change(function () {
+      var url = $("#personForm").attr("data-specialites-url");
+      var categorieId = $(this).val();
+      $.ajax({
+        url: url,
+        data: {
+          'categorie': categorieId
+        },
+        success: function (data) {
+           $("#id_specialite").html(data);
+           $("#id_specialite").trigger("chosen:updated");
+           $("#id_specialite").chosen();
+        }
+      });
+    });
+
+
+    $(window).ready(function () {
+        $("#id_commune, #id_specialite").fadeOut();
+        $("#id_commune, #id_specialite").siblings().fadeOut();
+        $("#id_wilaya").find('option').click(function () {
+            $("#id_commune").slideDown(500).siblings().slideDown(500);
+        });
+        $("#id_categorie").find('option').click(function () {
+            $("#id_specialite").slideDown().siblings().slideDown();
+            $("#id_specialite").fadeOut();
+        });
+
+        // Hide Placeholder On focus & Restore On Blur
+        var placeAttr = '';
+        $("[placeholder]").focus(function () {
+            placeAttr = $(this).attr('placeholder');
+            $(this).attr('placeholder', '');
+            if ($(".profile-form").hasClass("project-form")){
+                $("[placeholder]").addClass("input-focus-project");
+            }else{
+                $("[placeholder]").addClass("input-focus");
+            }
+        }).blur(function () {
+            $(this).attr('placeholder', placeAttr);
+            $(this).removeClass("input-focus-project");
+        })
+    });
+  </script>
+{% endblock %}

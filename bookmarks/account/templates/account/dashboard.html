@@ -1,0 +1,250 @@
+{% extends 'dash-base.html' %}
+{% block title %}Eureka | Mon Espace{% endblock %}
+{% load comments_xtd %}
+{% load comments %}
+{% load static %}
+{% block content %}
+
+
+
+        <!-- Start Dashboard Page => Projects Nears you -->
+          <div class="content">
+            <div class="row">
+              <div class="col-xs-12">
+                  <!-- Start Header Dashboard Page -->
+                  <header class="dash-header">
+                      <div class="container text-center">
+                          <div class="over-lay">
+                              <div class="dash-heading">
+                                  <h1>Dashboard</h1>
+                                  <h3>Projets Près de Vous !</h3>
+                              </div>
+                          </div>
+                      </div>
+                  </header>
+                  <!-- End Header Dashboard Page-->
+              </div>
+              <div class="col-xs-12 col-md-9">
+                <div class="dashboard-body" id="projects-ajax">
+                    {% for project in projects %}
+                    <div class="project-post">
+                        <div class="row">
+                          <div class="project">
+                              <div class="col-xs-2 col-sm-1">
+                                <div class="project-image">
+                                    <a href="{{ project.user.profile.get_absolute_url }}"><img src="{{ project.categorie.image.url }}" class="img-responsive img-thumbnail"></a>
+                                </div>
+                              </div>
+                              <div class="col-xs-10 col-sm-11">
+                                <div class="project-header">
+                                  <a href="{{ project.get_absolute_url }}">{{ project.project_title }}</a>
+                                  <i class="fa fa-calendar-alt"></i><span>Il y'a {{ project.created|timesince }} |</span>
+                                  <i class="fa fa-map-marker-alt"></i><span>{{ project.wilaya }}, {{ project.commune }}</span>
+                                </div>
+                              </div>
+                              <div class="col-xs-12">
+                                <div class="project-information">
+                                  <p>{{ project.description |linebreaks }}</p>
+                                  <ul class="list-unstyled">
+                                     {% get_comment_count for project as comment_count %}
+                                     <li>
+                                    {% with total_follows=project.users_follow.count users_follow=project.users_follow.all %}
+                                        <a href="#" data-id="{{ project.id }}" data-action="{% if request.user in users_follow %} un{% endif %}follow" class="follow button">
+                                            <div class="project-follow">
+                                            <span class="count">
+                                                <i class="fa fa-thumbs-up"></i>
+                                                <span class="total">{{ total_follows }}</span>
+                                            </span>
+                                            intéressé{{ total_follows|pluralize }}
+                                        </div>
+                                        </a>
+                                    {% endwith %}
+                                     </li>
+                                    <li class="commenter"><i class="fa fa-comments"></i> {{ comment_count }} <span class="hidden-xs"> Commenter</span></li>
+                                     <li><a href="#"><i class="fa fa-share "></i>10 <span class="hidden-xs"> Parteger</span></a></li>
+                                  </ul>
+                                </div>
+                             </div>
+                          </div>
+                        </div>
+                        <!-- Start Comment Secton -->
+                         {% if comment_count %}
+                         <div class="col-xs-12  comments">
+                             {% if comment_count > 3 %}
+                                 <a href="#" style="margin:10px 50px">Voir les commentaires précédents..</a>
+                             {% endif  %}
+                            {% get_last_xtdcomments 3 as comment_list for project.project %}
+                            {% for comment in comment_list %}
+                             <div class="comment-section">
+                               <div class="row">
+                                   <div class="col-xs-2 col-sm-2">
+                                    <div class="comment-poster-image">
+                                      <img src="{{ comment.user.profile.image.url }}" class="img-responsive">
+                                    </div>
+                                  </div>
+                                  <div class="col-xs-10 col-sm-10">
+                                    <div class="comment-body">
+                                          <a href="{{ comment.user.profile.get_absolute_url }}">{{ comment.user.first_name}} {{ comment.user.last_name }}<span> -{{ comment.submit_date | timesince }}</span></a></p>
+                                          <p>{{ comment.comment }}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                               </div>
+                              {% endfor %}
+                             <div class="post-comment" style="display: block">
+                              <div class="row">
+                                  <div class="col-xs-3 col-sm-2 col-md-1">
+                                    <div class="comment-poster-image">
+                                      <img src="{{ profile.image.url }}" class="img-responsive">
+                                    </div>
+                                  </div>
+                                  <div class="col-xs-8 col-sm-9 col-md-10">
+                                    <div class="comment-body">
+                                        {% get_comment_form for project as form %}
+                                        <div id="comment_form">
+                                            {% render_comment_form for project %}
+                                        </div>
+                                    </div>
+                                  </div>
+                              </div>
+                            </div>
+                            </div>
+                         {% endif %}
+                          <div class="post-comment">
+                              <div class="row">
+                                  <div class="col-xs-3 col-sm-2 col-md-1">
+                                    <div class="comment-poster-image">
+                                      <img src="{{ profile.image.url }}" class="img-responsive">
+                                    </div>
+                                  </div>
+                                  <div class="col-xs-8 col-sm-9 col-md-10">
+                                    <div class="comment-body">
+                                        {% get_comment_form for project as form %}
+                                        <div id="comment_form">
+                                            {% render_comment_form for project %}
+                                        </div>
+                                    </div>
+                                  </div>
+                              </div>
+                          </div>
+                        <!-- End Comment Section -->
+                    </div>
+                    {% endfor %}
+                    <div class="loader text-center" id="loader-1"></div>
+                    <div class="msg-error-loading text-center"><h4>Le chargement semble prendre du temps, <a href="{% url 'dashboard' %}">Ressayer</a></h4></div>
+                </div>
+            </div>
+          </div>
+
+        <!-- End Dashboard Page => Projects Nears you -->
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+        var page = 1;
+        var empty_page = false;
+        var block_request = false;
+
+        $(window).scroll(function() {
+            var margin = $(document).height() - $(window).height() - 200;
+            if  ($(window).scrollTop() > margin && empty_page == false && block_request == false) {
+                block_request = true;
+                page += 1;
+                $.get('?page=' + page, function(data) {
+                    if(data == '')
+                    {
+                        empty_page = true;
+                    }
+                    else {
+                        block_request = false;
+                        $('#projects-ajax').append(data);
+                    }
+                });
+                $(document).ajaxStart(function(){
+                     $("#loader-1").css("display", "block");
+                });
+
+                  $(document).ajaxComplete(function(){
+                       $("#loader-1").css("display", "none");
+                       $(".msg-error-loading").css("display", "none");
+                });
+                  $(document).ajaxError(function(){
+                       $(".msg-error-loading").css("display", "block");
+                });
+
+            }
+        });
+
+      function bindPostCommentHandler() {
+     $('#comment_form form input.submit-preview').remove();
+      $('#comment_form form').submit(function() {
+          $.ajax({
+              type: "POST",
+              data: $('#comment_form form').serialize(),
+              url: "{% comment_form_target %}",
+              cache: false,
+              dataType: "html",
+            success: function(html, textStatus) {
+                $('#comment_form  form').replaceWith(html);
+                 bindPostCommentHandler();
+             },
+             error: function (XMLHttpRequest, textStatus, errorThrown) {
+                 $('#comment_form  form').replaceWith('Your comment was unable to be posted at this time.  We apologise for the inconvenience.');
+             }
+         });
+         return false;
+     });
+ }
+
+     $(document).ready(function() {
+         bindPostCommentHandler();
+
+         // Slide Down Comment Area On Click
+         $(".commenter").click(function () {
+             if ($(this).parent().closest('.project-post').find(".post-comment").css('display') == 'none'){
+                 $(this).parent().closest('.project-post').find(".post-comment").slideDown(500);
+             }
+        })
+     });
+
+
+        </script>
+
+{% endblock %}
+
+{% block domready %}
+    $('a.follow').click(function(e){
+        e.preventDefault();
+        $.post('{% url "project:follow" %}',
+            {
+                id: $(this).data('id'),
+                action: $(this).data('action')
+            },
+            function(data){
+                if (data['status'] == 'ok')
+                {
+                    var previous_action = $('a.follow').data('action'),
+                        divfollow = $("a.follow").find(".project-follow");
+
+                    // toggle data-action
+                    $('a.follow').data('action', previous_action == 'follow' ? 'unfollow' : 'follow');
+
+
+                    if(previous_action == "follow"){
+                        divfollow.addClass("follows");
+                    }
+                    else{
+                        divfollow.removeClass("follows");
+                    }
+
+
+
+                    // update total follows
+                    var previous_follows = parseInt($('span.count .total').text());
+                    $('span.count .total').text(previous_action == 'follow' ? previous_follows + 1 : previous_follows - 1);
+                }
+        });
+
+    });
+{% endblock %}
+
